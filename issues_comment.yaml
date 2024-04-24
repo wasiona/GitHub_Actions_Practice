@@ -1,0 +1,28 @@
+name: Comment when there is an issue 
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  comment-with-action: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: "dump github content"
+        run: echo '${{ to JSON(github.event)}}' | jq
+        shell: bash 
+
+#add a comment to an issue 
+#using a community action after getting the issue no
+
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            This is a multi-line test comment
+            - With GitHub **Markdown** :sparkles:
+            - Created by [create-or-update-comment][1]
+
+            [1]: https://github.com/peter-evans/create-or-update-comment
+          reactions: '+1'
